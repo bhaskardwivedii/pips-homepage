@@ -23,14 +23,14 @@
       document.documentElement.dataset.mood = (m === 'day' || m === 'night') ? m : ((h >= 19 || h < 6) ? 'night' : 'day');
     })();
   </script>
-  <link rel="stylesheet" href="css/style.css">
-  <script src="js/config.js" defer></script>
-  <script src="js/core.js" defer></script>
-  <script src="js/pip.js" defer></script>
-  <script src="js/toys.js" defer></script>
-  <script src="js/game.js" defer></script>
-  <script src="js/chat.js" defer></script>
-  <script src="js/guestbook.js" defer></script>
+  <link rel="stylesheet" href="css/style.css?v=3">
+  <script src="js/config.js?v=3" defer></script>
+  <script src="js/core.js?v=3" defer></script>
+  <script src="js/pip.js?v=3" defer></script>
+  <script src="js/toys.js?v=3" defer></script>
+  <script src="js/game.js?v=3" defer></script>
+  <script src="js/chat.js?v=3" defer></script>
+  <script src="js/guestbook.js?v=3" defer></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to Pip's homepage</a>
@@ -243,10 +243,10 @@
         <div class="win-body">
           <p class="small oa-kicker">Straight from the brief — the canon studio art Pip's hand-drawn look here is based on:</p>
           <div class="oa-grid">
-            <img src="img/pip-portrait.jpg" width="640" height="961" loading="lazy" decoding="async" alt="Official Pip Studio Character Portrait, holding a lantern and a music box on a cloud">
-            <img src="img/pip-avatar-cloud.jpg" width="520" height="633" loading="lazy" decoding="async" alt="Official render of Pip waving, floating on a cloud">
-            <img src="img/pip-dream-lantern.jpg" width="520" height="464" loading="lazy" decoding="async" alt="Official Dream Nightlight Lantern render">
-            <img src="img/pip-lullaby-box.jpg" width="520" height="469" loading="lazy" decoding="async" alt="Official Lullaby Lab Music Box render">
+            <div class="oa-tile"><img src="img/pip-portrait.jpg" width="640" height="961" loading="lazy" decoding="async" alt="Official Pip Studio Character Portrait, holding a lantern and a music box on a cloud"></div>
+            <div class="oa-tile"><img src="img/pip-avatar-cloud.jpg" width="520" height="633" loading="lazy" decoding="async" alt="Official render of Pip waving, floating on a cloud"></div>
+            <div class="oa-tile"><img src="img/pip-dream-lantern.jpg" width="520" height="464" loading="lazy" decoding="async" alt="Official Dream Nightlight Lantern render"></div>
+            <div class="oa-tile"><img src="img/pip-lullaby-box.jpg" width="520" height="469" loading="lazy" decoding="async" alt="Official Lullaby Lab Music Box render"></div>
           </div>
           <figcaption class="small">Official art for Track 1 (Pip), provided by the <a href="https://hax.baby/baby-problem" rel="noopener">haX.baby organizers</a> — used here for reference/credit, not as site assets. Everything playable above is original, hand-coded SVG.</figcaption>
         </div>
