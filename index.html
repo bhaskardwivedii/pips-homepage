@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="en" data-mood="day">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Pip · Junior Dream Engineer at the Midnight Nursery</title>
+  <meta name="description" content="Hi, I'm Pip! A sleepy, cute skull-faced baby who builds the dreams you fall asleep inside. Lullabies, nightlights, dream deliveries and a guestbook.">
+  <meta name="theme-color" content="#fff8f1">
+  <meta property="og:title" content="Pip · Junior Dream Engineer">
+  <meta property="og:description" content="I build the dreams you fall asleep inside. 🌙">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/fredoka-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/fraunces-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    /* Set the mood before first paint so night visitors never see a white flash. */
+    (function () {
+      var m = null;
+      try { m = JSON.parse(localStorage.getItem('pip:mood')); } catch (e) {}
+      var h = new Date().getHours();
+      document.documentElement.dataset.mood = (m === 'day' || m === 'night') ? m : ((h >= 19 || h < 6) ? 'night' : 'day');
+    })();
+  </script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/config.js" defer></script>
+  <script src="js/core.js" defer></script>
+  <script src="js/pip.js" defer></script>
+  <script src="js/toys.js" defer></script>
+  <script src="js/game.js" defer></script>
+  <script src="js/chat.js" defer></script>
+  <script src="js/guestbook.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to Pip's homepage</a>
+
+  <!-- ============ Reusable little drawings ============ -->
+  <svg width="0" height="0" class="defs" aria-hidden="true" focusable="false">
+    <defs>
+      <radialGradient id="g-amber" cx=".5" cy=".5" r=".5">
+        <stop offset="0" stop-color="#fff3c4"/><stop offset=".45" stop-color="#ffb84d"/><stop offset="1" stop-color="#ffb84d" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="g-face" cx=".38" cy=".3" r=".8">
+        <stop offset="0" stop-color="#fffef8"/><stop offset="1" stop-color="#f1e2c8"/>
+      </radialGradient>
+      <radialGradient id="g-lamp" cx=".5" cy=".5" r=".5">
+        <stop offset="0" stop-color="#fff6cf"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/>
+      </radialGradient>
+      <symbol id="pip-mini" viewBox="0 0 100 100">
+        <ellipse cx="50" cy="58" rx="34" ry="32" fill="#fdf6ea" stroke="#5c4033" stroke-width="3"/>
+        <ellipse cx="38" cy="61" rx="9" ry="10.5" fill="#3a2a2f"/>
+        <ellipse cx="62" cy="61" rx="9" ry="10.5" fill="#3a2a2f"/>
+        <circle cx="39" cy="61" r="2.6" fill="#ffb84d"/><circle cx="63" cy="61" r="2.6" fill="#ffb84d"/>
+        <path d="M44 78 Q51 83 59 76" stroke="#5c4033" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+        <circle cx="26" cy="72" r="4" fill="#ffb3c6" opacity=".8"/><circle cx="74" cy="72" r="4" fill="#ffb3c6" opacity=".8"/>
+        <path d="M15 50 C17 16 70 2 92 34 C97 42 96 52 91 58 C86 44 75 38 64 37 C46 35 30 41 15 50Z" fill="#a34063" stroke="#5c4033" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M15 51 C34 37 64 33 84 43" stroke="#fff8f1" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <circle cx="91" cy="60" r="6.5" fill="#fff8f1" stroke="#5c4033" stroke-width="2.5"/>
+        <path d="M48 20 l2 4.5 5 .6 -3.7 3.4 1 4.9 -4.3-2.4 -4.3 2.4 1-4.9 -3.7-3.4 5-.6z" fill="#ffe29a"/>
+      </symbol>
+      <symbol id="ghost" viewBox="0 0 100 110">
+        <path d="M12 104 V50 a38 38 0 0 1 76 0 V104 l-12.7 -10 -12.6 10 -12.7 -10 -12.7 10 -12.6 -10 Z" fill="#fbf8ff" stroke="#5c4033" stroke-width="3" stroke-linejoin="round"/>
+        <ellipse cx="38" cy="52" rx="5.5" ry="7" fill="#3a2a2f"/><ellipse cx="62" cy="52" rx="5.5" ry="7" fill="#3a2a2f"/>
+        <circle cx="29" cy="66" r="5" fill="#ffb3c6" opacity=".8"/><circle cx="71" cy="66" r="5" fill="#ffb3c6" opacity=".8"/>
+        <ellipse cx="50" cy="68" rx="5" ry="4" fill="#3a2a2f"/>
+      </symbol>
+      <symbol id="star5" viewBox="0 0 24 24">
+        <path d="M12 1.5l3.1 6.6 7.2.9-5.3 5 1.4 7.1L12 17.6l-6.4 3.5L7 14l-5.3-5 7.2-.9z"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- ============ Top bar ============ -->
+  <header class="topbar">
+    <a class="logo" href="#top" aria-label="Pip's homepage, back to top">
+      <svg class="logo-pip" aria-hidden="true"><use href="#pip-mini"/></svg>
+      <span class="logo-word">pip<b>.baby</b></span>
+    </a>
+    <nav class="tb-nav" aria-label="Sections">
+      <a href="#about">Me</a><a href="#work">Work</a><a href="#story">Story</a><a href="#chat">Chat</a><a href="#guestbook">Guestbook</a>
+    </nav>
+    <div class="tb-controls" role="group" aria-label="Site controls">
+      <span class="chip size-chip" id="sizeChip" title="Pip renames your screen size. Try resizing!" aria-live="polite">📏 <span id="sizeName">Nursery</span></span>
+      <button class="chip" id="muteBtn" type="button" aria-pressed="false" title="Sound on or off (M)"><span class="ico" aria-hidden="true">🔊</span><span class="lbl">Sound on</span></button>
+      <button class="chip" id="moodBtn" type="button" aria-pressed="false" title="Day or night (N)"><span class="ico" aria-hidden="true">🌙</span><span class="lbl">Night</span></button>
+      <button class="chip" id="chaosBtn" type="button" aria-pressed="false" title="Responsive Chaos Mode (C)"><span class="ico" aria-hidden="true">🌀</span><span class="lbl">Chaos</span></button>
+      <button class="chip egg-chip" id="eggBtn" type="button" aria-haspopup="dialog" aria-controls="eggPanel" title="Easter eggs found"><span class="ico" aria-hidden="true">🥚</span><span id="eggCount">0/5</span></button>
+    </div>
+  </header>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track" id="marqueeTrack">
+      <span>★ Welcome to Pip's Homepage ★ Now with 100% more lullabies ★ Best viewed at bedtime ★ Under construction since last night ★ Sign my guestbook!! ★ No monsters allowed (except friendly ones) ★</span>
+      <span>★ Welcome to Pip's Homepage ★ Now with 100% more lullabies ★ Best viewed at bedtime ★ Under construction since last night ★ Sign my guestbook!! ★ No monsters allowed (except friendly ones) ★</span>
+    </div>
+  </div>
+
+  <main id="main">
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="sky" aria-hidden="true">
+        <span class="sun"></span><span class="moon"></span>
+        <i style="--x:8%;--y:18%;--d:0s"></i><i style="--x:22%;--y:62%;--d:.6s"></i><i style="--x:38%;--y:12%;--d:1.2s"></i>
+        <i style="--x:58%;--y:8%;--d:.3s"></i><i style="--x:74%;--y:30%;--d:1.6s"></i><i style="--x:90%;--y:58%;--d:.9s"></i>
+        <i style="--x:14%;--y:84%;--d:2s"></i><i style="--x:84%;--y:86%;--d:1.1s"></i><i style="--x:48%;--y:78%;--d:2.4s"></i>
+      </div>
+
+      <div class="hero-copy">
+        <p class="kicker">&lt;hello world /&gt; · Midnight Nursery · Est. last night</p>
+        <h1 id="hero-title">Hi, I'm <em>Pip</em>.</h1>
+        <p class="tagline">“I build the dreams you fall asleep inside.”</p>
+        <p class="role"><span class="badge-pill">Junior Dream Engineer</span> at the <b>Midnight Nursery</b></p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#work">See my work ✨</a>
+          <a class="btn" href="#guestbook">Sign my guestbook ✍️</a>
+        </div>
+        <div class="counter-box" aria-live="polite">
+          <span class="counter-label" id="counterLabel">You are visitor no.</span>
+          <span class="odometer" id="odometer" aria-label="Visitor number"><span class="sr" id="odoText">loading</span></span>
+        </div>
+      </div>
+
+      <div class="hero-pip">
+        <div class="bubble" id="pipBubble" role="status" aria-live="polite">*yawn* oh! hello there!</div>
+        <div class="pip-float">
+          <svg id="pip" viewBox="0 0 240 280" data-expr="awake" role="img" aria-labelledby="pipTitle">
+            <title id="pipTitle">Pip: a cute baby with a smooth, round skull face, huge soft eye sockets with cozy glowing pinpricks of light, a tiny crooked smile, a starry nightcap with a pink bow, floating on a cloud and holding a little lantern. Tap Pip to say hi.</title>
+            <!-- lantern glow (night) -->
+            <circle class="lantern-glow" cx="190" cy="214" r="46" fill="url(#g-lamp)"/>
+            <!-- cloud -->
+            <g class="pip-cloud">
+              <ellipse cx="120" cy="252" rx="98" ry="22"/>
+              <circle cx="58" cy="242" r="26"/><circle cx="182" cy="242" r="27"/>
+              <circle cx="96" cy="232" r="30"/><circle cx="146" cy="230" r="32"/>
+            </g>
+            <!-- body -->
+            <g class="pip-body">
+              <path d="M78 236 C74 200 90 180 120 180 C150 180 166 200 162 236 Z" fill="#ffd3df" stroke="#5c4033" stroke-width="3" stroke-linejoin="round"/>
+              <path d="M104 186 Q120 196 136 186" stroke="#5c4033" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <circle cx="120" cy="208" r="3" fill="#a34063"/><circle cx="120" cy="222" r="3" fill="#a34063"/>
+              <ellipse cx="80" cy="212" rx="12" ry="11" fill="#fdf6ea" stroke="#5c4033" stroke-width="3"/>
+              <!-- lantern in right hand -->
+              <g class="lantern">
+                <path d="M182 186 Q190 174 198 186" stroke="#5c4033" stroke-width="3" fill="none"/>
+                <rect x="176" y="190" width="28" height="36" rx="10" fill="#ffe7a3" stroke="#5c4033" stroke-width="3"/>
+                <path d="M184 202 a6 6 0 1 0 10 6 a7 7 0 1 1 -10 -6z" fill="#ffb84d"/>
+                <rect x="180" y="224" width="20" height="6" rx="3" fill="#c98a4b" stroke="#5c4033" stroke-width="2"/>
+              </g>
+              <ellipse cx="168" cy="204" rx="12" ry="11" fill="#fdf6ea" stroke="#5c4033" stroke-width="3"/>
+            </g>
+            <!-- head -->
+            <g id="pipHead">
+              <path d="M120 44 C164 44 190 76 190 116 C190 148 172 168 150 174 C146 182 136 186 120 186 C104 186 94 182 90 174 C68 168 50 148 50 116 C50 76 76 44 120 44Z" fill="url(#g-face)" stroke="#5c4033" stroke-width="3.5" stroke-linejoin="round"/>
+              <circle cx="70" cy="146" r="10" fill="#ffb3c6" opacity=".75"/><circle cx="170" cy="146" r="10" fill="#ffb3c6" opacity=".75"/>
+              <g class="eyes-open">
+                <ellipse cx="92" cy="122" rx="21" ry="24" fill="#3a2a2f"/>
+                <ellipse cx="148" cy="122" rx="21" ry="24" fill="#3a2a2f"/>
+                <g class="pupil" id="pupilL"><circle cx="92" cy="122" r="12" fill="url(#g-amber)"/><circle cx="92" cy="122" r="4.6" fill="#ffd27a"/><circle cx="90" cy="120" r="1.6" fill="#fff"/></g>
+                <g class="pupil" id="pupilR"><circle cx="148" cy="122" r="12" fill="url(#g-amber)"/><circle cx="148" cy="122" r="4.6" fill="#ffd27a"/><circle cx="146" cy="120" r="1.6" fill="#fff"/></g>
+              </g>
+              <g class="lids">
+                <path d="M70 121 A22 25 0 0 1 114 121 Q92 127 70 121Z" fill="#f6ead6"/>
+                <path d="M126 121 A22 25 0 0 1 170 121 Q148 127 126 121Z" fill="#f6ead6"/>
+                <path d="M70 121 Q92 128 114 121 M126 121 Q148 128 170 121" stroke="#5c4033" stroke-width="3" fill="none" stroke-linecap="round"/>
+              </g>
+              <g class="eyes-closed">
+                <ellipse cx="92" cy="122" rx="22" ry="25" fill="#f6ead6"/><ellipse cx="148" cy="122" rx="22" ry="25" fill="#f6ead6"/>
+                <path d="M76 124 Q92 136 108 124 M132 124 Q148 136 164 124" stroke="#5c4033" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+              </g>
+              <g class="eyes-happy">
+                <path d="M78 128 Q92 106 106 128 M134 128 Q148 106 162 128" stroke="#ffd27a" stroke-width="5" fill="none" stroke-linecap="round"/>
+              </g>
+              <!-- little skull nose -->
+              <path d="M114.5 143 Q120 140.5 125.5 143 Q123 149 120.6 152.5 Q120 153.3 119.4 152.5 Q117 149 114.5 143Z" fill="#5c4033"/>
+              <!-- mouths -->
+              <g class="mouth-smile">
+                <path d="M100 164 Q114 175 138 162" stroke="#5c4033" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+              </g>
+              <ellipse class="mouth-o" cx="120" cy="167" rx="7" ry="8" fill="#5c4033"/>
+              <path class="mouth-giggle" d="M102 160 Q120 160 138 160 Q134 178 120 178 Q106 178 102 160Z" fill="#5c4033"/>
+              <!-- nightcap -->
+              <g class="cap">
+                <path class="cap-fill" d="M46 96 C46 40 108 10 160 22 C204 32 222 74 216 116 C212 136 204 146 198 150 C200 124 192 96 170 84 C140 70 92 74 46 96Z" fill="#a34063" stroke="#5c4033" stroke-width="3.5" stroke-linejoin="round"/>
+                <path d="M44 98 C80 74 140 68 178 86" stroke="#fff8f1" stroke-width="13" fill="none" stroke-linecap="round"/>
+                <path d="M44 98 C80 74 140 68 178 86" stroke="#5c4033" stroke-width="1.5" fill="none" stroke-dasharray="2 6" stroke-linecap="round"/>
+                <use href="#star5" x="134" y="34" width="12" height="12" fill="#ffe29a"/>
+                <use href="#star5" x="176" y="58" width="10" height="10" fill="#ffe29a"/>
+                <circle cx="199" cy="156" r="13" fill="#fff8f1" stroke="#5c4033" stroke-width="3"/>
+                <!-- bow -->
+                <path d="M62 86 L42 74 L44 100 Z M62 86 L80 72 L82 98 Z" fill="#ff9ec0" stroke="#5c4033" stroke-width="2.5" stroke-linejoin="round"/>
+                <circle cx="62" cy="86" r="6" fill="#ff7aa8" stroke="#5c4033" stroke-width="2.5"/>
+              </g>
+              <!-- the secret star (Easter egg) -->
+              <g id="capStar" class="cap-star" tabindex="0" role="button" aria-label="A very shiny star on Pip's nightcap">
+                <circle cx="102" cy="48" r="17" fill="transparent"/>
+                <use href="#star5" x="90" y="36" width="24" height="24" fill="#ffe29a" stroke="#5c4033" stroke-width="1"/>
+              </g>
+            </g>
+            <g class="zzz" aria-hidden="true">
+              <text x="196" y="40">Z</text><text x="214" y="22" font-size="16">z</text><text x="226" y="10" font-size="11">z</text>
+            </g>
+          </svg>
+        </div>
+        <p class="hint">psst… I follow your cursor (or your finger). Tap me!</p>
+      </div>
+    </section>
+
+    <!-- ============ ABOUT ============ -->
+    <section class="section" id="about" aria-labelledby="about-title" data-pip-line="That's my official Nursery ID. The photo is my good side. Both sides are my good side.">
+      <p class="sec-kicker">&lt;section 01 /&gt; what I am</p>
+      <h2 id="about-title">A baby with a skull face<br><span class="soft">and a marshmallow heart.</span></h2>
+      <div class="about-grid">
+        <article class="id-card win" aria-label="Pip's Midnight Nursery ID card">
+          <div class="win-bar"><span>NURSERY_ID.CARD</span><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
+          <div class="id-body">
+            <div class="id-photo"><svg aria-hidden="true"><use href="#pip-mini"/></svg><span class="holo" aria-hidden="true"></span></div>
+            <dl class="id-fields">
+              <div><dt>Name</dt><dd>Pip</dd></div>
+              <div><dt>Species</dt><dd>Baby (skull-faced, smooth &amp; round)</dd></div>
+              <div><dt>Age</dt><dd>0 years, 11 months, ~4,000 naps</dd></div>
+              <div><dt>Job</dt><dd>Junior Dream Engineer</dd></div>
+              <div><dt>Eyes</dt><dd>Huge soft sockets. Cozy glowing pinpricks.</dd></div>
+            </dl>
+          </div>
+          <div class="barcode" aria-hidden="true">||| |||| | || ||| | |||| || | ZZZ-0001</div>
+        </article>
+        <div class="traits">
+          <h3>Personality, in stickers</h3>
+          <ul class="stickers">
+            <li style="--r:-4deg">🔭 curious</li><li style="--r:3deg">😴 sleepy</li><li style="--r:-2deg">🧸 a lil clumsy</li>
+            <li style="--r:5deg">🤭 giggles at everything</li><li style="--r:-3deg">🎵 hums constantly</li><li style="--r:2deg">💛 never scary. promise.</li>
+          </ul>
+          <div class="likes">
+            <div><h4>Likes</h4><p>Warm milk with stardust, the hum of the fridge, nightlights shaped like moons.</p></div>
+            <div><h4>Dislikes</h4><p>Silence. Total silence. Brrr. That's why I make so many sounds.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <figure class="win official-art" aria-label="Pip's official studio art, provided by the haX.baby organizers">
+        <div class="win-bar"><span>OFFICIAL_ART.JPG</span><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
+        <div class="win-body">
+          <p class="small oa-kicker">Straight from the brief — the canon studio art Pip's hand-drawn look here is based on:</p>
+          <div class="oa-grid">
+            <img src="img/pip-portrait.jpg" width="640" height="961" loading="lazy" decoding="async" alt="Official Pip Studio Character Portrait, holding a lantern and a music box on a cloud">
+            <img src="img/pip-avatar-cloud.jpg" width="520" height="633" loading="lazy" decoding="async" alt="Official render of Pip waving, floating on a cloud">
+            <img src="img/pip-dream-lantern.jpg" width="520" height="464" loading="lazy" decoding="async" alt="Official Dream Nightlight Lantern render">
+            <img src="img/pip-lullaby-box.jpg" width="520" height="469" loading="lazy" decoding="async" alt="Official Lullaby Lab Music Box render">
+          </div>
+          <figcaption class="small">Official art for Track 1 (Pip), provided by the <a href="https://hax.baby/baby-problem" rel="noopener">haX.baby organizers</a> — used here for reference/credit, not as site assets. Everything playable above is original, hand-coded SVG.</figcaption>
+        </div>
+      </figure>
+    </section>
+
+    <!-- ============ WORK ============ -->
+    <section class="section" id="work" aria-labelledby="work-title" data-pip-line="These are my projects! Every single one is playable. Go on, poke them.">
+      <p class="sec-kicker">&lt;section 02 /&gt; what I make</p>
+      <h2 id="work-title">My portfolio <span class="soft">(six projects, zero naps skipped)</span></h2>
+
+      <div class="work-grid">
+        <!-- 1. Lullaby Lab -->
+        <article class="win project" id="lab" aria-labelledby="lab-title" data-pip-line="My Lullaby Lab! Press the stars, or keys 1 to 8. Wind the key for my lullaby.">
+          <div class="win-bar"><span>LULLABY_LAB.EXE</span><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
+          <div class="win-body">
+            <h3 id="lab-title">🎵 The Lullaby Lab</h3>
+            <p>A music box I built from an attic find. Tap the stars to play notes, wind the key for my lullaby, or let me make up a new one.</p>
+            <div class="musicbox" id="musicbox">
+              <svg viewBox="0 0 320 150" class="mb-art" aria-hidden="true">
+                <rect x="40" y="58" width="240" height="84" rx="14" fill="#ffd3df" stroke="#5c4033" stroke-width="3"/>
+                <rect x="40" y="58" width="240" height="20" rx="8" fill="#ff9ec0" stroke="#5c4033" stroke-width="3"/>
+                <path d="M54 22 h212 l14 36 h-240z" fill="#fff0c9" stroke="#5c4033" stroke-width="3" stroke-linejoin="round"/>
+                <g class="mb-cyl"><rect x="80" y="92" width="150" height="30" rx="15" fill="#ffd27a" stroke="#5c4033" stroke-width="3"/>
+                  <g class="pins" fill="#5c4033"><circle cx="96" cy="102" r="2.5"/><circle cx="116" cy="112" r="2.5"/><circle cx="136" cy="100" r="2.5"/><circle cx="156" cy="110" r="2.5"/><circle cx="176" cy="104" r="2.5"/><circle cx="196" cy="114" r="2.5"/><circle cx="214" cy="102" r="2.5"/></g></g>
+                <g class="mb-key"><rect x="282" y="92" width="18" height="10" fill="#c98a4b" stroke="#5c4033" stroke-width="2.5"/>
+                  <path d="M300 74 q16 0 16 23 q0 23 -16 23 q8 -23 0 -46z" fill="#ffd27a" stroke="#5c4033" stroke-width="2.5"/></g>
+                <use href="#pip-mini" x="128" y="-6" width="64" height="64"/>
+              </svg>
+              <div class="notes-fly" id="notesFly" aria-hidden="true"></div>
+            </div>
+            <div class="keys" id="keys" role="group" aria-label="Music box notes. Keyboard keys 1 to 8 also play."></div>
+            <div class="row">
+              <button class="btn btn-primary" id="lullabyBtn" type="button" aria-pressed="false">🗝️ Wind the key</button>
+              <button class="btn" id="dreamTuneBtn" type="button">✨ Make up a new tune</button>
+            </div>
+            <p class="small" id="labStatus" aria-live="polite">Now playing: nothing (it's too quiet!)</p>
+          </div>
+        </article>
+
+        <!-- 4. Rattle & Block Toys: mini-game -->
+        <article class="win project" id="game" aria-labelledby="game-title" data-pip-line="Help me catch the falling dreams! Dodge the alarm clocks, they're so loud.">
+          <div class="win-bar"><span>DREAM_CATCHER.GAME</span><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
+          <div class="win-body">
+            <h3 id="game-title">🎮 Catch the Falling Dreams</h3>
+            <p>A toy from my Rattle &amp; Block department. Catch stars and moons. Dodge the noisy alarm clocks!</p>
+            <div class="game-wrap" id="gameWrap">
+              <canvas id="gameCanvas" width="360" height="420" aria-label="Catch the falling dreams game. Use arrow keys or drag to move Pip."></canvas>
+              <div class="game-hud" aria-hidden="true"><span id="gScore">★ 0</span><span id="gTime">⏱ 30</span><span id="gLives">💖💖💖</span></div>
+              <div class="game-overlay" id="gameOverlay">
+                <p class="go-title" id="goTitle">Catch the Dreams!</p>
+                <p class="go-sub" id="goSub">⭐ +1 · 🌙 +5 · ⏰ ouch<br>Drag, or use ← → keys</p>
+                <button class="btn btn-primary" id="gameStart" type="button">▶ Play</button>
+                <p class="go-best">Best: <span id="gBest">0</span></p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 2. Nightlight Collection -->
+        <article class="win project wide" id="lights" aria-labelledby="lights-title" data-pip-line="It's dark in here! Move your light around and click a lamp to switch it on. Something's hiding…">
+          <div class="win-bar"><span>NIGHTLIGHTS.GALLERY</span><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
+          <div class="win-body">
+            <h3 id="lights-title">🏮 The Nightlight Collection</h3>
+            <p>Lamps I designed for every kind of dark. Your cursor (or finger) is a nightlight. Find each lamp and switch it on.</p>
+            <div class="darkroom" id="darkroom">
+              <div class="lamps" id="lamps">
+                <button class="lamp" type="button" aria-pressed="false" data-glow="#ffd27a">
+                  <svg viewBox="0 0 80 90" aria-hidden="true"><path d="M52 12 a28 28 0 1 0 14 46 a22 22 0 1 1 -14 -46z" fill="#fff4d6" stroke="#5c4033" stroke-width="3"/><path d="M36 40 q4 4 8 0 M48 52 q4 3 8 0" stroke="#5c4033" stroke-width="2.5" fill="none" stroke-linecap="round"/><rect x="26" y="74" width="30" height="10" rx="4" fill="#c98a4b" stroke="#5c4033" stroke-width="2.5"/></svg>
+                  <b>Crescent Snoozer</b><small>A porcelain moon that hums when it's too quiet.</small>
+                </button>
+                <button class="lamp" type="button" aria-pressed="false" data-glow="#b7d9ff">
+                  <svg viewBox="0 0 80 90" aria-hidden="true"><path d="M14 44 a26 26 0 0 1 52 0z" fill="#d9ecff" stroke="#5c4033" stroke-width="3"/><path d="M20 46 q0 14 -4 28 M32 46 q2 16 0 34 M48 46 q-2 16 0 34 M60 46 q0 14 4 28" stroke="#9fc7f5" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="32" cy="34" r="2.5" fill="#3a2a2f"/><circle cx="48" cy="34" r="2.5" fill="#3a2a2f"/></svg>
+                  <b>Jellyfish Lantern</b><small>Floats near the ceiling. Wobbles when you giggle.</small>
+                </button>
+                <button class="lamp" type="button" aria-pressed="false" data-glow="#ffe29a">
+                  <svg viewBox="0 0 80 90" aria-hidden="true"><rect x="18" y="20" width="44" height="60" rx="12" fill="#eef7ff" stroke="#5c4033" stroke-width="3"/><rect x="22" y="10" width="36" height="12" rx="4" fill="#c98a4b" stroke="#5c4033" stroke-width="2.5"/><use href="#star5" x="26" y="34" width="12" height="12" fill="#ffc94d"/><use href="#star5" x="42" y="48" width="14" height="14" fill="#ffc94d"/><use href="#star5" x="28" y="60" width="10" height="10" fill="#ffc94d"/></svg>
+                  <b>Star Jar</b><small>41 caught stars. One is a firefly pretending.</small>
+                </button>
+                <button class="lamp" type="button" aria-pressed="false" data-glow="#ffc2d6">
+                  <svg viewBox="0 0 80 90" aria-hidden="true"><path d="M16 60 a14 14 0 0 1 4 -27 a18 18 0 0 1 34 -6 a14 14 0 0 1 12 33z" fill="#fff" stroke="#5c4033" stroke-width="3" stroke-linejoin="round"/><path d="M32 46 q3 3 6 0 M46 46 q3 3 6 0" stroke="#5c4033" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M40 60 v18" stroke="#5c4033" stroke-width="3"/><rect x="30" y="76" width="20" height="8" rx="3" fill="#c98a4b" stroke="#5c4033" stroke-width="2.5"/></svg>
+                  <b>Cloud Puff</b><small>Squishy, warm, and smells a bit like toast.</small>
+                </button>
+                <button class="lamp" type="button" aria-pressed="false" data-glow="#d6c8ff">
+                  <svg viewBox="0 0 80 90" aria-hidden="true"><g stroke="#5c4033" stroke-width="3" fill="#fdf6ea"><circle cx="22" cy="24" r="9"/><circle cx="34" cy="16" r="9"/><circle cx="46" cy="74" r="9"/><circle cx="58" cy="66" r="9"/></g><path d="M30 24 L50 66" stroke="#5c4033" stroke-width="16" stroke-linecap="round"/><path d="M30 24 L50 66" stroke="#fdf6ea" stroke-width="10" stroke-linecap="round"/></svg>
+                  <b>Bone-Bulb</b><small>Shaped like my favourite chew toy. Glows brighter if you're scared.</small>
+                </button>
+              </div>
+              <button class="boo" id="boo" type="button" aria-label="Something small is hiding in the dark"><svg aria-hidden="true"><use href="#ghost"/></svg></button>
+              <canvas class="dark-veil" id="darkVeil" aria-hidden="true"></canvas>
+            </div>
+            <div class="row">
+              <button class="btn" id="allLampsBtn" type="button">💡 Switch on every lamp</button>
+              <span class="small" id="lampStatus" aria-live="polite">0 of 5 lamps glowing</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- 3. Dream Delivery Routes -->
+        <article class="win project wide" id="routes" aria-labelledby="routes-title" data-pip-line="Keep scrolling! I fly the route as you go. Every lit window is a dream delivered.">
+          <div class="win-bar"><span>DREAM_DELIVERY.MAP</span><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
+          <div class="win-body">
+            <h3 id="routes-title">🚀 Dream Delivery Routes</h3>
+            <p>My nightly flight over the rooftops. Scroll and I'll fly it: every window lights up when its dream arrives.</p>
+            <svg class="route-map" id="routeMap" viewBox="0 0 640 300" role="img" aria-labelledby="routeDesc">
+              <desc id="routeDesc">A map of rooftops with a dotted flight path. Pip flies along it as you scroll and windows light up when dreams arrive.</desc>
+              <rect width="640" height="300" rx="16" class="rm-sky"/>
+              <circle cx="560" cy="58" r="26" class="rm-moon"/>
+              <g class="rm-stars"><use href="#star5" x="80" y="30" width="10" height="10"/><use href="#star5" x="250" y="20" width="8" height="8"/><use href="#star5" x="420" y="40" width="10" height="10"/><use href="#star5" x="170" y="70" width="7" height="7"/><use href="#star5" x="480" y="100" width="7" height="7"/></g>
+              <g class="rm-houses" id="routeHouses">
+                <g data-x="70" data-y="190"><path d="M30 300 V200 l40 -34 40 34 V300z"/><rect class="win-light" x="58" y="214" width="24" height="24" rx="4"/></g>
+                <g data-x="170" data-y="214"><path d="M130 300 V226 l40 -30 40 30 V300z"/><rect class="win-light" x="158" y="236" width="24" height="22" rx="4"/></g>
+                <g data-x="270" data-y="170"><path d="M228 300 V180 l42 -36 42 36 V300z"/><rect class="win-light" x="257" y="196" width="26" height="26" rx="4"/></g>
+                <g data-x="370" data-y="210"><path d="M330 300 V222 l40 -32 40 32 V300z"/><rect class="win-light" x="358" y="234" width="24" height="22" rx="4"/></g>
+                <g data-x="470" data-y="184"><path d="M428 300 V196 l42 -34 42 34 V300z"/><rect class="win-light" x="457" y="212" width="26" height="26" rx="4"/></g>
+                <g data-x="574" data-y="206"><path d="M534 300 V218 l40 -32 40 32 V300z"/><rect class="win-light" x="562" y="230" width="24" height="22" rx="4"/></g>
+              </g>
+              <path id="routeGhost" d="M20 120 C70 60 90 170 130 150 S200 80 240 110 S320 160 350 120 S420 60 460 110 S540 170 620 130" class="rm-path-bg"/>
+              <path id="routePath" d="M20 120 C70 60 90 170 130 150 S200 80 240 110 S320 160 350 120 S420 60 460 110 S540 170 620 130" class="rm-path"/>
+              <g id="routePip"><use href="#pip-mini" x="-22" y="-26" width="44" height="44"/></g>
+            </svg>
+            <p class="route-meter">Dreams delivered tonight: <b id="routeCount">0</b> / 6</p>
+          </div>
+        </article>
+
+        <!-- 5. Bedtime Storybook -->
+        <article class="win project" id="book" aria-labelledby="book-title" data-pip-line="I wrote AND illustrated this. Swipe, use arrow keys, or press the buttons to turn the pages.">
+          <div class="win-bar"><span>STORYBOOK.TXT</span><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
+          <div class="win-body">
+            <h3 id="book-title">📖 Bedtime Storybook</h3>
+            <p>My first book: <i>The Moon Who Couldn't Sleep</i>. Swipe, use ← →, or tap the buttons.</p>
+            <div class="book" id="book-el" tabindex="0" role="region" aria-roledescription="storybook" aria-label="The Moon Who Couldn't Sleep. Use left and right arrow keys to turn pages.">
+              <div class="page cover"><div class="pg-art">🌙</div><p class="pg-title">The Moon Who Couldn't Sleep</p><p class="pg-by">written &amp; illustrated by Pip (age 0¾)</p></div>
+              <div class="page"><div class="pg-art">🌕 💤</div><p>The Moon had one job: glow all night. But tonight, the Moon felt <i>sooo</i> sleepy.</p></div>
+              <div class="page"><div class="pg-art">🌕 😟</div><p>“If I close my eyes,” worried the Moon, “who will keep the dark soft?”</p></div>
+              <div class="page"><div class="pg-art">💀🔧 💡</div><p>Pip had an idea. Pip built a nightlight shaped like a teeny tiny moon.</p></div>
+              <div class="page"><div class="pg-art">☁️🌕 🌛</div><p>The tiny moon glowed while the big Moon napped behind a fluffy cloud.</p></div>
+              <div class="page"><div class="pg-art">🏠 🏠 🏠</div><p>Everyone slept. Even the Moon. <i>Especially</i> the Moon.</p></div>
+              <div class="page end"><div class="pg-art">✨</div><p class="pg-title">The End</p><p class="pg-by">Shhh. Sweet dreams. 🌙</p></div>
+            </div>
+            <div class="row book-nav">
+              <button class="btn" id="bookPrev" type="button" aria-label="Back to the previous page">◀ Back</button>
+              <span class="small" id="bookPage" aria-live="polite">Cover</span>
+              <button class="btn btn-primary" id="bookNext" type="button">Turn ▶</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- 6. Growth Chart -->
+        <article class="win project" id="growth" aria-labelledby="growth-title" data-pip-line="My growth chart! The Night Nanny measures me every month. Giggling broke the chart.">
+          <div class="win-bar"><span>GROWTH_CHART.BMP</span><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
+          <div class="win-body">
+            <h3 id="growth-title">📏 Pip's Growth Chart</h3>
+            <p>My skills, measured in crayon on the nursery wall.</p>
+            <div class="growth" id="growthChart">
+              <div class="ruler" aria-hidden="true"><span style="--v:10">10</span><span style="--v:8">8</span><span style="--v:6">6</span><span style="--v:4">4</span><span style="--v:2">2</span><span style="--v:0">0</span></div>
+              <ul class="crayons">
+                <li style="--v:9;--c:#ff8fb1"><span class="crayon" role="img" aria-label="Lullaby writing: 9 out of 10"></span><b>Lullabies</b><em>9/10</em></li>
+                <li style="--v:8;--c:#ffc94d"><span class="crayon" role="img" aria-label="Nightlight design: 8 out of 10"></span><b>Lamps</b><em>8/10</em></li>
+                <li style="--v:7;--c:#8fc8ff"><span class="crayon" role="img" aria-label="Dream delivery: 7 out of 10"></span><b>Delivery</b><em>7/10</em></li>
+                <li style="--v:10;--c:#b39cff"><span class="crayon" role="img" aria-label="Napping: 10 out of 10, record holder"></span><b>Naps 🏆</b><em>10/10</em></li>
+                <li style="--v:1;--c:#9be0b4"><span class="crayon" role="img" aria-label="Staying awake: 1 out of 10"></span><b>Awake</b><em>1/10</em></li>
+                <li class="over" style="--v:11.4;--c:#ff7a8a"><span class="crayon" role="img" aria-label="Giggling: off the chart"></span><b>Giggles</b><em>∞</em></li>
+              </ul>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ STORY (scroll-driven) ============ -->
+    <section class="story" id="story" aria-labelledby="story-title" data-pip-line="This is how I got my job. Keep scrolling, it's a short one. Like me.">
+      <div class="story-stage" id="storyStage" data-scene="0">
+        <div class="story-art">
+          <svg viewBox="0 0 400 300" class="st-svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="st-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="st-sky1"/><stop offset="1" class="st-sky2"/></linearGradient>
+            </defs>
+            <rect width="400" height="300" fill="url(#st-sky)"/>
+            <g class="st-stars" fill="#ffe29a">
+              <use href="#star5" x="30" y="30" width="8" height="8"/><use href="#star5" x="90" y="70" width="6" height="6"/><use href="#star5" x="150" y="24" width="9" height="9"/>
+              <use href="#star5" x="230" y="54" width="6" height="6"/><use href="#star5" x="300" y="20" width="8" height="8"/><use href="#star5" x="360" y="80" width="7" height="7"/>
+              <use href="#star5" x="60" y="120" width="6" height="6"/><use href="#star5" x="200" y="100" width="7" height="7"/><use href="#star5" x="330" y="130" width="6" height="6"/>
+            </g>
+            <circle class="st-moon" cx="320" cy="70" r="30" fill="#fff4d6"/>
+            <path class="st-roofs" d="M0 300 V230 l40-30 40 30 V214 l50-40 50 40 v24 l30-24 40 30 V200 l50-38 50 38 v30 l50-30 V300z"/>
+            <!-- scene 0: alone -->
+            <g class="sc sc0"><use href="#pip-mini" x="166" y="140" width="64" height="64"/><text x="236" y="150" class="st-txt">…</text></g>
+            <!-- scene 1: music box -->
+            <g class="sc sc1">
+              <rect x="150" y="186" width="100" height="44" rx="10" fill="#ffd3df" stroke="#5c4033" stroke-width="3"/>
+              <path d="M156 186 l10-26 h68 l10 26z" fill="#fff0c9" stroke="#5c4033" stroke-width="3"/>
+              <use href="#pip-mini" x="96" y="160" width="60" height="60"/>
+              <text x="236" y="150" class="st-note n1">♪</text><text x="262" y="122" class="st-note n2">♫</text><text x="290" y="160" class="st-note n3">♪</text>
+            </g>
+            <!-- scene 2: ghosts -->
+            <g class="sc sc2">
+              <use href="#ghost" x="70" y="130" width="60" height="66" class="gh g1"/>
+              <use href="#ghost" x="170" y="110" width="66" height="72" class="gh g2"/>
+              <use href="#ghost" x="276" y="134" width="56" height="62" class="gh g3"/>
+              <text x="126" y="132" class="st-z">z</text><text x="234" y="110" class="st-z">z</text><text x="330" y="132" class="st-z">z</text>
+            </g>
+            <!-- scene 3: hired -->
+            <g class="sc sc3">
+              <rect x="110" y="120" width="180" height="110" rx="12" fill="#fff0c9" stroke="#5c4033" stroke-width="3"/>
+              <rect x="126" y="96" width="148" height="30" rx="8" fill="#a34063" stroke="#5c4033" stroke-width="3"/>
+              <text x="200" y="117" text-anchor="middle" class="st-sign">MIDNIGHT NURSERY</text>
+              <use href="#pip-mini" x="160" y="140" width="80" height="80"/>
+              <circle cx="262" cy="196" r="14" fill="#ffc94d" stroke="#5c4033" stroke-width="3"/><text x="262" y="201" text-anchor="middle" font-size="13">★</text>
+            </g>
+            <!-- scene 4: flying -->
+            <g class="sc sc4">
+              <path d="M20 200 C110 120 200 230 380 110" stroke="#ffe29a" stroke-width="3" stroke-dasharray="4 8" fill="none" stroke-linecap="round"/>
+              <use href="#pip-mini" x="250" y="120" width="70" height="70" class="fly"/>
+              <rect x="56" y="244" width="14" height="14" rx="3" fill="#ffd27a"/><rect x="186" y="232" width="14" height="14" rx="3" fill="#ffd27a"/><rect x="306" y="240" width="14" height="14" rx="3" fill="#ffd27a"/>
+            </g>
+          </svg>
+        </div>
+        <div class="story-text">
+          <p class="sec-kicker">&lt;section 03 /&gt; my story</p>
+          <h2 id="story-title">How a baby got a job</h2>
+          <ol class="scenes" id="scenes">
+            <li data-i="0"><h3>The quietest night</h3><p>Once, the Midnight Nursery was so quiet I could hear my own eyelashes. (I don't have eyelashes. <i>That's</i> how quiet.) Nobody could sleep.</p></li>
+            <li data-i="1"><h3>A broken music box</h3><p>In the attic I found a music box with a bent key. I hummed into it. It hummed back. Hehe.</p></li>
+            <li data-i="2"><h3>Three little ghosts</h3><p>Three grumpy ghosts floated by, wide awake. I played my wobbly tune. One yawned. Then two. Then… zzz.</p></li>
+            <li data-i="3"><h3>Hired!</h3><p>The Night Nanny gave me a starry nightcap, a lantern and a badge: <b>Junior Dream Engineer</b>. I wear it everywhere. Even in the bath.</p></li>
+            <li data-i="4"><h3>Tonight</h3><p>Now I fly over the rooftops, building dreams for everyone. Tonight's dream is a little different. It's for <i>you</i>. 💤</p></li>
+          </ol>
+          <div class="story-dots" role="group" aria-label="Jump to a story scene">
+            <button type="button" data-go="0" aria-label="Scene 1"></button><button type="button" data-go="1" aria-label="Scene 2"></button><button type="button" data-go="2" aria-label="Scene 3"></button><button type="button" data-go="3" aria-label="Scene 4"></button><button type="button" data-go="4" aria-label="Scene 5"></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CHAT ============ -->
+    <section class="section" id="chat" aria-labelledby="chat-title" data-pip-line="Ooh, wanna chat? I type slowly. Tiny fingers.">
+      <p class="sec-kicker">&lt;section 04 /&gt; ask me anything</p>
+      <h2 id="chat-title">PipMessenger <span class="soft">(online · a bit sleepy)</span></h2>
+      <div class="win chat-win">
+        <div class="win-bar"><span>PipMessenger 98 · chatting with Pip</span><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
+        <div class="chat-log" id="chatLog" role="log" aria-live="polite" aria-label="Chat with Pip"></div>
+        <div class="chat-quick" id="chatQuick">
+          <button type="button" class="qr">Who are you?</button><button type="button" class="qr">What's your job?</button><button type="button" class="qr">Sing for me</button><button type="button" class="qr">Tell me a joke</button><button type="button" class="qr">Any secrets?</button>
+        </div>
+        <form class="chat-form" id="chatForm" autocomplete="off">
+          <label class="sr" for="chatInput">Message Pip</label>
+          <input id="chatInput" maxlength="160" placeholder="Say hi to Pip…" enterkeyhint="send">
+          <button class="btn btn-primary" type="submit">Send</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ GUESTBOOK ============ -->
+    <section class="section" id="guestbook" aria-labelledby="gb-title" data-pip-line="Sign my guestbook, pleeease! Leave me a dream wish and I'll build it tonight.">
+      <p class="sec-kicker">&lt;section 05 /&gt; guestbook</p>
+      <h2 id="gb-title">Sign my guestbook ✍️ <span class="soft">leave a dream wish</span></h2>
+      <div class="gb-grid">
+        <form class="win gb-form" id="gbForm" novalidate>
+          <div class="win-bar"><span>NEW_WISH.TXT</span><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
+          <div class="win-body">
+            <label for="gbName">Your name</label>
+            <input id="gbName" name="name" maxlength="24" required autocomplete="nickname" placeholder="e.g. Sleepy Sam">
+            <label for="gbMsg">Your dream wish <span class="small" id="gbChars">0/140</span></label>
+            <textarea id="gbMsg" name="message" maxlength="140" rows="3" required placeholder="I wish to dream about…"></textarea>
+            <fieldset class="gb-stickers"><legend>Pick a sticker</legend>
+              <label><input type="radio" name="sticker" value="🌙" checked><span>🌙</span></label>
+              <label><input type="radio" name="sticker" value="⭐"><span>⭐</span></label>
+              <label><input type="radio" name="sticker" value="☁️"><span>☁️</span></label>
+              <label><input type="radio" name="sticker" value="🧸"><span>🧸</span></label>
+              <label><input type="radio" name="sticker" value="👻"><span>👻</span></label>
+              <label><input type="radio" name="sticker" value="💀"><span>💀</span></label>
+            </fieldset>
+            <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <button class="btn btn-primary" type="submit" id="gbSubmit">Sign the guestbook ✨</button>
+            <p class="small" id="gbStatus" aria-live="polite"></p>
+          </div>
+        </form>
+        <div class="gb-wall">
+          <p class="gb-mode small" id="gbMode"></p>
+          <ol class="gb-list" id="gbList" aria-label="Guestbook entries"></ol>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="construction" role="note"><span aria-hidden="true">🚧</span> This homepage is under construction. Pip builds during naptime. <span aria-hidden="true">🚧</span></div>
+    <nav class="webring" aria-label="Webring">
+      <button type="button" class="ring-btn" data-ring="prev">◄ prev</button>
+      <span>🌙 Midnight Nursery Webring 🌙</span>
+      <button type="button" class="ring-btn" data-ring="next">next ►</button>
+    </nav>
+    <ul class="badges88" aria-label="Badges">
+      <li class="b1">BEST VIEWED<br>AT BEDTIME</li><li class="b2">MADE WITH<br>&lt;HTML&gt;</li><li class="b3">POWERED BY<br>LULLABIES</li><li class="b4">NO<br>MONSTERS*</li><li class="b5">♥ NIGHT<br>MODE ♥</li>
+    </ul>
+    <p class="small">*except friendly ones</p>
+    <p class="footer-moon"><button type="button" id="footerMoon" aria-label="A sleepy moon. Some say holding it does something.">🌙</button></p>
+    <div class="credits">
+      <h2 class="credits-title">Credits</h2>
+      <p>Pip is the canon character from the <a href="https://hax.baby/baby-problem" rel="noopener">haX.baby “Baby's First Website” brief</a>. The four official reference renders shown in <i>What I am</i> are provided by the haX.baby organizers; every playable drawing on this site is otherwise hand-coded SVG and CSS. Every sound is synthesized live with the Web Audio API (no audio files). The lullaby, the storybook and Pip's words are original.</p>
+      <p>Fonts: <b>Fraunces</b>, <b>Fredoka</b> and <b>VT323</b> (SIL Open Font License), self-hosted from <a href="https://fontsource.org" rel="noopener">Fontsource</a>. Guestbook &amp; hit counter: <a href="https://supabase.com" rel="noopener">Supabase</a> (when connected). No other libraries.</p>
+      <p>Keyboard: <kbd>M</kbd> sound · <kbd>N</kbd> night · <kbd>C</kbd> chaos · <kbd>1</kbd>–<kbd>8</kbd> music box. Built for haX.baby · Baby's First Website · Oct 2026.</p>
+    </div>
+  </footer>
+
+  <!-- ============ Overlays ============ -->
+  <aside class="narrator" id="narrator" aria-live="polite" aria-label="Pip, your host">
+    <p class="narr-bubble" id="narrBubble"></p>
+    <button type="button" class="narr-pip" id="narrPip" aria-label="Pip, your host. Tap for a fun fact."><svg aria-hidden="true"><use href="#pip-mini"/></svg></button>
+  </aside>
+
+  <div class="egg-panel" id="eggPanel" role="dialog" aria-modal="false" aria-labelledby="eggPanelTitle" hidden>
+    <div class="win">
+      <div class="win-bar"><span id="eggPanelTitle">EASTER_EGGS.LOG</span><button type="button" class="x" id="eggClose" aria-label="Close">✕</button></div>
+      <div class="win-body"><ul class="egg-list" id="eggList"></ul><p class="small">Find all 5 for a golden surprise.</p></div>
+    </div>
+  </div>
+
+  <div class="secret-room" id="secretRoom" role="dialog" aria-modal="true" aria-labelledby="secretTitle" hidden>
+    <div class="secret-inner">
+      <svg class="secret-pip" aria-hidden="true"><use href="#pip-mini"/></svg>
+      <h2 id="secretTitle">You found the Secret Dream Room</h2>
+      <p>Only the very curious get in here. This is where I keep my favourite lullaby. Close your eyes… 🌙</p>
+      <button type="button" class="btn btn-primary" id="secretClose">Tiptoe back out</button>
+    </div>
+  </div>
+
+  <div class="certificate" id="certificate" role="dialog" aria-modal="true" aria-labelledby="certTitle" hidden>
+    <div class="cert-inner">
+      <p class="cert-kicker">★ Official Midnight Nursery Certificate ★</p>
+      <h2 id="certTitle">Dream Detective</h2>
+      <p>For finding <b>every single secret</b> on Pip's homepage. Pip's nightcap is now golden, in your honour.</p>
+      <p class="cert-sign">signed, <i>Pip</i> 💀🌙</p>
+      <button type="button" class="btn btn-primary" id="certClose">Yay! Close</button>
+    </div>
+  </div>
+
+  <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+  <canvas id="fx" aria-hidden="true"></canvas>
+  <noscript><p class="noscript">Pip works best with JavaScript on, but the story and portfolio above are all readable without it. 🌙</p></noscript>
+</body>
+</html>
